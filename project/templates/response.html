@@ -23,23 +23,27 @@
 
                 <h3 class="mt-4">Bronnen</h3>
                 {% for i, name in enumerate(documents) %}
-
                 <p>
                     <a href="/documents/{{ name.get('id', None) }}">[{{i+1}}]: {{ name.get('id', None) }}</a>
                 </p>
                 {% endfor %}
 
+                <br>
+
                 <h3 class="mt-4">Documentovereenkomsten</h3>
                 {% for i, r in enumerate(responses) %}
 
                 <div>
-                    <h5 class="text-decoration-underline">
+                    <h6>
                         Overeenkomst ({{i+1}}): {{ documents[r['documentIndex']].get('id', 'Not found') }}
-                    </h5>
+                        <a href="/documents/{{documents[r['documentIndex']].get('id', 'Not found')}}">[PDF]</a>
+                    </h6>
                     <p class="text-secondary">Score: {{ r['score'] }}</p>
                     {% autoescape false %}
                     <p>{{ r['text'] }}</p>
                     {% endautoescape %}
+                    <br>
+                    <hr>
                     <br>
                 </div>
                 {% endfor %}
@@ -49,6 +53,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block footer %}
 
 {% endblock %}

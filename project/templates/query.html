@@ -36,7 +36,7 @@
         <!-- Selecteer het aantal documentenovereenkomsten -->
         <div class="input-group mb-2">
             <label for="num_docs" class="tt input-group-text w-50 text-wrap" data-bs-placement="top"
-                   data-bs-html="true" title="Standaardwaarde: 20" id="inputGroup-sizing-default">
+                   data-bs-html="true" title="Standaardwaarde: 15" id="inputGroup-sizing-default">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-info-circle" viewBox="0 0 16 16">
                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
@@ -45,7 +45,7 @@
                 &#20 Selecteer het aantal documentenovereenkomsten:
             </label>
             <select class="form-select w-50" aria-label="Default select example" name="num_docs" id="num_docs">
-                <option selected value="10"></option>
+                <option selected value="15"></option>
                 {% for i in range(100) %}
                 <option value="{{i+1}}">{{i+1}}</option>
                 {% endfor %}
@@ -124,7 +124,6 @@
     </div>
 </div>
 
-
 <script>
     function clearInput() {
         document.getElementById('query').value = '';
@@ -184,5 +183,9 @@
     }
 
 </script>
+
+{% endblock %}
+
+{% block footer %}
 
 {% endblock %}
