@@ -1,9 +1,7 @@
 # 👋 Welcome
 
 ## ℹ️ About this project
-This repository is the home of a Proof of Concept (PoC) for a Retrieval Augmented Generation (RAG) web application, 
-developed for Veiligheidsregio Brabant Noord. This project represents an improvement to information retrieval process 
-within VRBN.
+This repository is the home of a Proof of Concept (PoC) for a Retrieval Augmented Generation (RAG) web application. This project helps  retrieving information out a large collection of documents.
 
 
 ## 🔧 Technologies used
