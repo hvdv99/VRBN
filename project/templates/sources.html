@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %} Bronnen {% endblock %}
+
+{% block content %}
+
+<div class="container text-wrap py-3">
+    <h1>Verwerkte documenten</h1>
+    <p>
+        Onderstaande documenten zijn opgenomen door de tool. Klik op een bestandsnaam om de inhoud van het document te
+        bekijken.
+    </p>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Bestandsnaam</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i, filename in enumerate(filename_title_mapper.keys()) %}
+            <tr>
+                <td>{{i+1}}</td>
+                <td><a href="/documents/{{filename}}">{{filename}}</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

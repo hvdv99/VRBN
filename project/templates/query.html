@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% block title %} Stel uw vraag {% endblock %}
+
+{% block content %}
+<div class="container p-3">
+    <h1>Documentbevraging</h1>
+    <form method="POST" id="queryForm">
+        <!-- Vraag -->
+        <div class="input-group mb-2 text-wrap">
+            <label for="query" class="input-group-text" id="inputGroup-sizing-default">Vraag: </label>
+            <textarea class="form-control" aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-default" name="query" id="query"
+                      placeholder="Typ hier uw vraag"></textarea>
+        </div>
+
+        <!-- Range slider -->
+        <div class="input-group mb-3 mt-3 w-50">
+            <label for="range-lambda" class="tt form-label" data-bs-placement="top" data-bs-html="true"
+                   title="De lambda-waarde helpt bij het vinden van overeenkomsten in documenten. Met een waarde van
+                   0 zoekt het systeem alleen naar exact dezelfde woorden zoals gebruikt in de vraagstelling, terwijl
+                   een waarde van 1 enkel gebruik maakt van AI om ook vergelijkbare woorden te vinden. Door de
+                   lambda-waarde aan te passen, kun je kiezen voor een balans tussen deze twee methoden. <br><br>
+                   Aanbevolen waarde: tussen 0.01 en 0.1<br>Standaard waarde: 0.025">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"></path>
+                </svg>
+                &#20 Selecteer de lambda waarde:
+            </label>
+            <input type="range" class="form-range" min="0" max="1" step="0.005" value="0.025"
+                   oninput="this.nextElementSibling.value = this.value" id="range-lambda" name="range-lambda">
+            <output id="range-lambda-output">0.025</output>
+        </div>
+
+        <!-- Selecteer het aantal documentenovereenkomsten -->
+        <div class="input-group mb-2">
+            <label for="num_docs" class="tt input-group-text w-50 text-wrap" data-bs-placement="top"
+                   data-bs-html="true" title="Standaardwaarde: 20" id="inputGroup-sizing-default">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"></path>
+                </svg>
+                &#20 Selecteer het aantal documentenovereenkomsten:
+            </label>
+            <select class="form-select w-50" aria-label="Default select example" name="num_docs" id="num_docs">
+                <option selected value="10"></option>
+                {% for i in range(100) %}
+                <option value="{{i+1}}">{{i+1}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Selecteer het aantal zinnen die de documentovereenkomst omringen -->
+        <div class="input-group mb-2">
+            <label for="sentences_context" class="tt input-group-text w-50 text-wrap" id="inputGroup-sizing-default"
+                   data-bs-placement="top" data-bs-html="true"
+                   title="Standaardwaarde: 2<br><br>Deze parameter bepaalt hoeveel tekst uit de documentovereenkomst wordt gebruikt om
+                   een samenvatting te genereren.">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"></path>
+                </svg>
+                &#20 Selecteer het aantal zinnen die de documentovereenkomst omringen:
+            </label>
+            <select class="form-select" name="sentences_context" id="sentences_context">
+                <option selected value="2"></option>
+                {% for i in range(6) %}
+                <option value="{{i+1}}">{{i+1}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Selecteer het aantal documentenovereenkomsten voor de samenvatting -->
+        <div class="input-group mb-2">
+            <label for="num_docs" class="tt input-group-text w-50 text-wrap" id="inputGroup-sizing-default"
+                   data-bs-placement="top" data-bs-html="true" title="Standaardwaarde: 4<br><br>Deze parameter bepaalt hoeveel documentovereenkomsten worden doorgegeven
+            voor de samenvatting. Let op: als deze parameter te hoog is dan zal er te veel tekst worden gebruikt,
+            waardoor het model niet in staat is om een samenvatting te genereren.">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"></path>
+                </svg>
+                &#20 Selecteer het aantal documentenovereenkomsten voor de samenvatting: </label>
+            <select class="form-select" aria-label="Default select example" name="num_docs_summary"
+                    id="num_docs_summary">
+                <option selected value="4"></option>
+                {% for i in range(10) %}
+                <option value="{{i+1}}">{{i+1}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress mt-3 mb-3" style="height: 20px;">
+            <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitButton">
+            Bevraag documenten
+            <svg class="bi ms-1" width="20" height="20" fill="#ffffff">
+                <use xlink:href="#arrow-right-short"/>
+            </svg>
+        </button>
+    </form>
+
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-secondary mt-1" onclick="clearInput()">
+            Wis tekstveld
+            <svg class="bi ms-1" width="20" height="20" fill="#ffffff">
+                <use xlink:href="#arrow-right-short"/>
+            </svg>
+        </button>
+    </div>
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-secondary mt-1" onclick="resetSelectWidgets()">
+            Reset parameters
+            <svg class="bi ms-1" width="20" height="20" fill="#ffffff">
+                <use xlink:href="#arrow-right-short"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+
+<script>
+    function clearInput() {
+        document.getElementById('query').value = '';
+    }
+
+    document.getElementById('submitButton').addEventListener('click', function () {
+        var progressBar = document.getElementById('progressBar');
+        var width = 0;
+        var interval = setInterval(function () {
+            if (width >= 100) {
+                clearInterval(interval);
+            } else {
+                width++;
+                progressBar.style.width = width + '%';
+            }
+        }, 100); // Adjust the time here to control the speed of the progress bar
+    });
+
+    function resetSelectWidgets() {
+        // Find all select elements on the page
+        var selects = document.getElementsByTagName('select');
+
+        // Iterate through all select elements
+        for (var i = 0; i < selects.length; i++) {
+            // Set the value of each select element to its default
+            // Assuming the default is the first option
+            selects[i].selectedIndex = 0;
+        }
+
+        // Reset the range input with id "range-lambda" to a default value
+        var rangeInput = document.getElementById('range-lambda');
+        if (rangeInput) {
+            rangeInput.value = 0.025; // Set this to the default value you want
+        }
+
+        var outputTag = document.getElementById('range-lambda-output');
+        if (outputTag) {
+            outputTag.textContent = '0.025'; // Set this to the default value you want
+        }
+    }
+
+    window.onload = function () {
+        // Update the output element when the page loads
+        var rangeInput = document.getElementById('range-lambda');
+        var outputElement = document.getElementById('range-lambda-output');
+
+        if (rangeInput && outputElement) {
+            // Set the output element's text to match the range input's value
+            outputElement.textContent = rangeInput.value;
+
+            // Additionally, you might want to set up an event listener
+            // for the range input to update the output element in real-time
+            //rangeInput.addEventListener('input', function() {
+            //    outputElement.textContent = rangeInput.value;
+            //});
+        }
+    }
+
+</script>
+
+{% endblock %}

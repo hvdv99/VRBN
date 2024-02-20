@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %} Resultaten {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-11">
+            <h1 class="mb-4">Resultaten</h1>
+            <div>
+                <h3>Vraagstelling <span class="text-secondary">(lambda waarde: {{lambda_par}})</span></h3>
+                <p>{{ query }}</p>
+                <h3>Samenvatting van documentovereenkomsten</h3>
+                <p>{{ summary[0].get('text') }}</p>
+
+
+                <button class="btn btn-primary d-inline-flex align-items-center" type="button"
+                        onclick="window.history.back();">
+                    Stel nieuwe vraag
+                    <svg class="bi ms-1" width="20" height="20" fill="#ffffff">
+                        <use xlink:href="#arrow-right-short"/>
+                    </svg>
+                </button>
+
+                <h3 class="mt-4">Bronnen</h3>
+                {% for i, name in enumerate(documents) %}
+
+                <p>
+                    <a href="/documents/{{ name.get('id', None) }}">[{{i+1}}]: {{ name.get('id', None) }}</a>
+                </p>
+                {% endfor %}
+
+                <h3 class="mt-4">Documentovereenkomsten</h3>
+                {% for i, r in enumerate(responses) %}
+
+                <div>
+                    <h5 class="text-decoration-underline">
+                        Overeenkomst ({{i+1}}): {{ documents[r['documentIndex']].get('id', 'Not found') }}
+                    </h5>
+                    <p class="text-secondary">Score: {{ r['score'] }}</p>
+                    {% autoescape false %}
+                    <p>{{ r['text'] }}</p>
+                    {% endautoescape %}
+                    <br>
+                </div>
+                {% endfor %}
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
