@@ -1,6 +1,18 @@
-# About
-This repository contains the source code for a proof of concept (PoC) Retrieval Augmented Generation (RAG) tool carried 
-out for Veiligheidsregio Brabant Noord.
+# 👋 Welcome
 
-It was build using Flask, Bootstrap and Docker. For document handling, it uses Google Cloud Storage. Please note that 
-this is a PoC and it needs more work in order for the application to evolve to a rigid production app.   
+## ℹ️ About this project
+This repository is the home of a Proof of Concept (PoC) for a Retrieval Augmented Generation (RAG) web application, 
+developed for Veiligheidsregio Brabant Noord. This project represents an improvement to information retrieval process 
+within VRBN.
+
+
+## 🔧 Technologies used
+* Flask: For a lightweight and efficient backend.
+* Bootstrap: To create a responsive and visually appealing front-end design.
+* Docker: To create a runtime environment that is system independent. 
+* Google Cloud Platform: For document handling and container hosting.
+
+## ✅ Project status
+It's important to note that this is a starting point, the application is a work in progress. It demonstrates core RAG 
+functionalities but to evolve this application from its current PoC state into a robust, production-ready tool, other
+features must be implemented. 
