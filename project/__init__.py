@@ -9,12 +9,11 @@ from google.cloud import storage
 
 from project.vectara import query_corpus, list_documents, extract_titles, generate_token, upload_to_vectara
 
-
+load_dotenv('.flaskenv')
 FLASK_ENVIRONMENT = os.getenv('FLASK_ENVIRONMENT')
 if FLASK_ENVIRONMENT == 'development':
     from google.oauth2 import service_account
     load_dotenv('.env')
-    load_dotenv('.flaskenv')
     logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
 else:
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
@@ -81,7 +80,7 @@ def document(filename):
 
         if not download_response:
             logging.info(f"File {filename} does not exist")
-            flash('Bestand niet gevonden, controleer bronnen', 'warning')
+            flash('Bestand niet gevonden, controleer de bronnen', 'warning')
             return redirect(url_for('sources'))
 
     else:
@@ -104,6 +103,7 @@ def download_file_from_bucket(filename):
 
     bucket = client.get_bucket(bucket_name)
     blob = bucket.blob(filename)
+
     if not blob.exists():
         return False
     else:
@@ -119,8 +119,8 @@ def check_token_and_update_document_list():
     if token['expires'] is None or token['expires'] <= datetime.datetime.now():
         token_response = generate_token()
         token['access_token'] = token_response.get('access_token')
-        token['expires'] = datetime.datetime.now() + datetime.timedelta(
-            seconds=token_response.get('expires_in'))
+        token['expires'] = (datetime.datetime.now() +
+                            datetime.timedelta(seconds=token_response.get('expires_in')))
 
         update_vectara_document_list()
         not_in_vectara = compare_files()
@@ -160,7 +160,7 @@ def list_blobs():
 
 
 def compare_files():
-    files_in_bucket = set(list_blobs())
+    files_in_bucket = set(list_blobs()) - {'slides-oplevering-21-02-2024.pdf'}
     vectara_filenames = set(extract_titles(documents).keys())
     not_in_vectara = list(files_in_bucket - vectara_filenames)
     logging.info(f"Files not in vectara: {not_in_vectara}")
